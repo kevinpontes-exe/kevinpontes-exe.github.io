@@ -1,183 +1,242 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Valentine</title>
+    <title>Valentine Surprise 💖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Patrick Hand', cursive;
+            background-color: #ffe6e6;
+            text-align: center;
+            overflow: hidden;
+        }
 
-<style>
-body {
-  margin: 0;
-  padding: 0;
-  background: pink;
-  font-family: Arial, sans-serif;
-  overflow: hidden;
-  text-align: center;
-}
+        h1, p {
+            margin: 20px;
+            color: #ff1493;
+        }
 
-/* HEART RAIN BACKGROUND */
-#heart-rain {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
+        p { font-size: 18px; }
 
-/* MAIN CONTENT IN FRONT */
-.content {
-  position: relative;
-  z-index: 10;
-  padding-top: 100px;
-}
+        /* CAPTCHA */
+        #captchaScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-h1 {
-  font-size: 40px;
-  color: red;
-}
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 10px;
+            margin-top: 20px;
+        }
 
-img {
-  width: 250px;
-  border-radius: 20px;
-  margin-top: 20px;
-}
+        .grid img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-button {
-  margin-top: 30px;
-  padding: 15px 40px;
-  font-size: 20px;
-  border: none;
-  border-radius: 30px;
-  background: red;
-  color: white;
-  cursor: pointer;
-}
+        .grid img.selected {
+            border-color: #ff1493;
+            transform: scale(1.05);
+        }
 
-button:hover {
-  background: darkred;
-}
+        button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 30px;
+            background-color: #ff1493;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-/* RAINING HEART */
-.heart {
-  position: absolute;
-  color: red;
-  font-size: 20px;
-  animation: fall linear infinite;
-}
+        button:hover { background-color: #ff69b4; }
 
-@keyframes fall {
-  0% {
-    transform: translateY(-10vh);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(110vh);
-    opacity: 0;
-  }
-}
+        /* Loading Screen */
+        #loadingScreen {
+            display: none;
+            font-size: 28px;
+            margin-top: 150px;
+            color: #ff1493;
+        }
 
-/* BIG EXPLOSION HEART */
-.explosion {
-  position: fixed;
-  font-size: 150px;
-  color: red;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  z-index: 20;
-  animation: explode 1s ease-out forwards;
-}
+        /* Valentine Screen */
+        #valentineScreen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-@keyframes explode {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
-  }
-  70% {
-    transform: translate(-50%, -50%) scale(1.5);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(2);
-    opacity: 0;
-  }
-}
+        #valentineScreen h1 {
+            font-size: 40px;
+            text-shadow: 2px 2px 5px #ff69b4;
+            margin-top: 100px;
+        }
 
-/* FAKE LOADING SCREEN */
-#loading {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: pink;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  z-index: 30;
-  font-size: 30px;
-  color: red;
-}
-</style>
+        .buttons {
+            margin-top: 40px;
+            display: inline-flex;
+            gap: 20px;
+            position: relative;
+        }
+
+        #yesBtn, #noBtn {
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            border: none;
+            position: relative;
+        }
+
+        #yesBtn {
+            background-color: #ff1493;
+            color: white;
+        }
+
+        #yesBtn:hover {
+            background-color: #ff69b4;
+            transform: scale(1.1);
+        }
+
+        #noBtn {
+            background-color: white;
+            color: #ff1493;
+        }
+
+        /* Floating hearts */
+        .heart {
+            position: absolute;
+            animation: float 5s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div id="heart-rain"></div>
+<div id="captchaScreen">
+    <h1>Choose your husband to continue 💖</h1>
+    <p>Click all the pictures of your future husband to prove youre not a bot :)</p>
 
-<div class="content">
-  <h1>Will you make me the happiest person alive and be my Valentine? ❤️</h1>
+    <div class="grid" id="imageGrid">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+    </div>
 
-  <img src="images/DSC04690 2.JPG" alt="Husband">
-
-  <br>
-  <button onclick="sayYes()">YES 💖</button>
+    <button id="verifyBtn">Verify</button>
 </div>
 
-<div id="loading">
-  <p>Loading eternal love...</p>
-  <p>❤️❤️❤️</p>
+<div id="loadingScreen">
+    💘 Loading Love... 💘
+</div>
+
+<div id="valentineScreen">
+    <h1>💕 Will you do me the honor of letting me be your Valentine? 💕</h1>
+    <p>(You cant say no)</p>
+    <div class="buttons">
+        <button id="yesBtn" onclick="sayYes()">YES 💖</button>
+        <button id="noBtn" onmouseover="dodgeButton()">NO 😢</button>
+    </div>
 </div>
 
 <script>
-/* CREATE LOTS OF RAINING HEARTS */
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.classList.add("heart");
-  heart.innerHTML = "❤️";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = Math.random() * 20 + 15 + "px";
-  heart.style.animationDuration = Math.random() * 3 + 2 + "s";
-  document.getElementById("heart-rain").appendChild(heart);
+    const images = document.querySelectorAll("#imageGrid img");
 
-  setTimeout(() => {
-    heart.remove();
-  }, 5000);
-}
+    images.forEach(img => {
+        img.addEventListener("click", () => {
+            img.classList.toggle("selected");
+        });
+    });
 
-setInterval(createHeart, 100);
+    document.getElementById("verifyBtn").addEventListener("click", () => {
+        let correct = true;
+        images.forEach(img => {
+            if (!img.classList.contains("selected")) correct = false;
+        });
 
-/* YES BUTTON ACTION */
-function sayYes() {
+        if (correct) {
+            document.getElementById("captchaScreen").style.display = "none";
+            document.getElementById("loadingScreen").style.display = "block";
 
-  // BIG HEART EXPLOSION
-  const explosion = document.createElement("div");
-  explosion.classList.add("explosion");
-  explosion.innerHTML = "❤️";
-  document.body.appendChild(explosion);
+            setTimeout(() => {
+                document.getElementById("loadingScreen").style.display = "none";
+                document.getElementById("valentineScreen").style.display = "flex";
+            }, 2000);
+        } else {
+            alert("Oops! Please select all the pictures correctly 🐶");
+        }
+    });
 
-  setTimeout(() => {
-    explosion.remove();
-  }, 1000);
+    function sayYes() {
+        heartExplosion();
+        setTimeout(() => {
+            document.getElementById("valentineScreen").innerHTML = `
+                <h1 style="margin-top:150px; color:white;">
+                💖 Song of Solomon 3:4 "I have found the one whom my soul loves" 💖<br>
+                Eu te amo minha abelhinha 🐝❤️
+                </h1>
+            `;
+        }, 800);
+    }
 
-  // SHOW FAKE LOADING
-  setTimeout(() => {
-    document.getElementById("loading").style.display = "flex";
-  }, 800);
-}
+    function dodgeButton() {
+        const noBtn = document.getElementById("noBtn");
+        const offset = 150;
+        const newX = Math.random() * offset * 2 - offset;
+        const newY = Math.random() * offset * 2 - offset;
+        noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
+    }
+
+    function createHeart(x = null, y = null) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.fontSize = Math.random() * 30 + 15 + "px";
+        heart.style.left = x ? x + "px" : Math.random() * window.innerWidth + "px";
+        heart.style.top = y ? y + "px" : "100vh";
+        document.body.appendChild(heart);
+        setTimeout(() => { heart.remove(); }, 5000);
+    }
+
+    function heartExplosion() {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                createHeart(
+                    centerX + (Math.random() * 300 - 150),
+                    centerY + (Math.random() * 300 - 150)
+                );
+            }, i * 20);
+        }
+    }
+
+    setInterval(() => createHeart(), 100);
 </script>
 
 </body>
