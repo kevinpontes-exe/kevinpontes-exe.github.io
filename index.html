@@ -3,10 +3,8 @@
 <head>
     <title>Valentine Surprise 💖</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
-        /* COMMON STYLES */
         body {
             margin: 0;
             font-family: 'Patrick Hand', cursive;
@@ -20,11 +18,9 @@
             color: #ff1493;
         }
 
-        p {
-            font-size: 18px;
-        }
+        p { font-size: 18px; }
 
-        /* CAPTCHA GRID */
+        /* CAPTCHA */
         #captchaScreen {
             display: flex;
             flex-direction: column;
@@ -36,7 +32,6 @@
             display: grid;
             grid-template-columns: repeat(3, 120px);
             gap: 10px;
-            justify-content: center;
             margin-top: 20px;
         }
 
@@ -67,11 +62,17 @@
             transition: 0.3s;
         }
 
-        button:hover {
-            background-color: #ff69b4;
+        button:hover { background-color: #ff69b4; }
+
+        /* Loading Screen */
+        #loadingScreen {
+            display: none;
+            font-size: 28px;
+            margin-top: 150px;
+            color: #ff1493;
         }
 
-        /* VALENTINE SCREEN */
+        /* Valentine Screen */
         #valentineScreen {
             display: none;
             flex-direction: column;
@@ -85,10 +86,6 @@
             margin-top: 100px;
         }
 
-        #valentineScreen p {
-            font-size: 20px;
-        }
-
         .buttons {
             margin-top: 40px;
             display: inline-flex;
@@ -99,11 +96,10 @@
         #yesBtn, #noBtn {
             padding: 15px 30px;
             font-size: 20px;
-            border: none;
             border-radius: 30px;
             cursor: pointer;
+            border: none;
             position: relative;
-            transition: 0.3s;
         }
 
         #yesBtn {
@@ -121,12 +117,10 @@
             color: #ff1493;
         }
 
-        /* Floating hearts - upgraded */
+        /* Floating hearts */
         .heart {
             position: absolute;
-            font-size: 20px;
             animation: float 5s linear infinite;
-            transform-origin: center;
         }
 
         @keyframes float {
@@ -137,13 +131,11 @@
 </head>
 <body>
 
-<!-- CAPTCHA SCREEN -->
 <div id="captchaScreen">
     <h1>Choose your husband to continue 💖</h1>
     <p>Click all the pictures of your future husband to prove youre not a bot :)</p>
 
     <div class="grid" id="imageGrid">
-        <!-- All 9 blocks use your image -->
         <img src="images/DSC04690_2.JPG" data-type="husband">
         <img src="images/DSC04690_2.JPG" data-type="husband">
         <img src="images/DSC04690_2.JPG" data-type="husband">
@@ -158,7 +150,10 @@
     <button id="verifyBtn">Verify</button>
 </div>
 
-<!-- VALENTINE SCREEN -->
+<div id="loadingScreen">
+    💘 Loading Love... 💘
+</div>
+
 <div id="valentineScreen">
     <h1>💕 Will you do me the honor of letting me be your Valentine? 💕</h1>
     <p>(You cant say no)</p>
@@ -169,7 +164,6 @@
 </div>
 
 <script>
-    // CAPTCHA LOGIC
     const images = document.querySelectorAll("#imageGrid img");
 
     images.forEach(img => {
@@ -181,68 +175,68 @@
     document.getElementById("verifyBtn").addEventListener("click", () => {
         let correct = true;
         images.forEach(img => {
-            const isHusband = img.dataset.type === "husband";
-            const isSelected = img.classList.contains("selected");
-            if (isHusband !== isSelected) correct = false;
+            if (!img.classList.contains("selected")) correct = false;
         });
 
         if (correct) {
-            // Show Valentine screen
             document.getElementById("captchaScreen").style.display = "none";
-            document.getElementById("valentineScreen").style.display = "flex";
+            document.getElementById("loadingScreen").style.display = "block";
+
+            setTimeout(() => {
+                document.getElementById("loadingScreen").style.display = "none";
+                document.getElementById("valentineScreen").style.display = "flex";
+            }, 2000);
         } else {
             alert("Oops! Please select all the pictures correctly 🐶");
         }
     });
 
-    // VALENTINE LOGIC
     function sayYes() {
-        document.getElementById("valentineScreen").innerHTML = `
-            <h1 style="margin-top:150px; color:white;">
-                 💖 Song of Solomon 3:4 "I have found the one whom my soul loves" 💖<br>
+        heartExplosion();
+        setTimeout(() => {
+            document.getElementById("valentineScreen").innerHTML = `
+                <h1 style="margin-top:150px; color:white;">
+                💖 Song of Solomon 3:4 "I have found the one whom my soul loves" 💖<br>
                 Eu te amo minha abelhinha 🐝❤️
-            </h1>
-        `;
+                </h1>
+            `;
+        }, 800);
     }
 
     function dodgeButton() {
         const noBtn = document.getElementById("noBtn");
-        const yesBtn = document.getElementById("yesBtn");
         const offset = 150;
         const newX = Math.random() * offset * 2 - offset;
         const newY = Math.random() * offset * 2 - offset;
         noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
     }
 
-    // Floating hearts - upgraded
-    function createHeart() {
+    function createHeart(x = null, y = null) {
         const heart = document.createElement("div");
         heart.classList.add("heart");
         heart.innerHTML = "💖";
-
-        // Random position
-        heart.style.left = Math.random() * 100 + "vw";
-
-        // Random size
         heart.style.fontSize = Math.random() * 30 + 15 + "px";
-
-        // Random color
-        const colors = ["#ff1493", "#ff69b4", "#ffb6c1", "#fff"];
-        heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-
-        // Random animation duration
-        heart.style.animationDuration = Math.random() * 3 + 2 + "s";
-
-        // Random rotation
-        heart.style.transform = `rotate(${Math.random()*360}deg)`;
-
+        heart.style.left = x ? x + "px" : Math.random() * window.innerWidth + "px";
+        heart.style.top = y ? y + "px" : "100vh";
         document.body.appendChild(heart);
-
         setTimeout(() => { heart.remove(); }, 5000);
     }
 
-    // Generate hearts more frequently
-    setInterval(createHeart, 100); // every 0.1s → lots of hearts
+    function heartExplosion() {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                createHeart(
+                    centerX + (Math.random() * 300 - 150),
+                    centerY + (Math.random() * 300 - 150)
+                );
+            }, i * 20);
+        }
+    }
+
+    setInterval(() => createHeart(), 100);
 </script>
 
 </body>
