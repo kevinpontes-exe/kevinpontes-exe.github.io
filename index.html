@@ -59,12 +59,8 @@
             background-color: #ff1493;
             color: white;
             cursor: pointer;
-            transition: 0.3s;
         }
 
-        button:hover { background-color: #ff69b4; }
-
-        /* Loading Screen */
         #loadingScreen {
             display: none;
             font-size: 28px;
@@ -72,7 +68,6 @@
             color: #ff1493;
         }
 
-        /* Valentine Screen */
         #valentineScreen {
             display: none;
             flex-direction: column;
@@ -82,7 +77,6 @@
 
         #valentineScreen h1 {
             font-size: 40px;
-            text-shadow: 2px 2px 5px #ff69b4;
             margin-top: 100px;
         }
 
@@ -97,8 +91,8 @@
             padding: 15px 30px;
             font-size: 20px;
             border-radius: 30px;
-            cursor: pointer;
             border: none;
+            cursor: pointer;
             position: relative;
         }
 
@@ -107,25 +101,31 @@
             color: white;
         }
 
-        #yesBtn:hover {
-            background-color: #ff69b4;
-            transform: scale(1.1);
-        }
-
         #noBtn {
             background-color: white;
             color: #ff1493;
         }
 
-        /* Floating hearts */
-        .heart {
+        /* Raining hearts */
+        .rainHeart {
             position: absolute;
-            animation: float 5s linear infinite;
+            top: -50px;
+            font-size: 20px;
+            animation: rain linear forwards;
         }
 
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        @keyframes rain {
+            to {
+                transform: translateY(110vh);
+                opacity: 0;
+            }
+        }
+
+        /* Explosion hearts */
+        .explodeHeart {
+            position: absolute;
+            font-size: 30px;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -136,15 +136,15 @@
     <p>Click all the pictures of your future husband to prove youre not a bot :)</p>
 
     <div class="grid" id="imageGrid">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
     </div>
 
     <button id="verifyBtn">Verify</button>
@@ -187,56 +187,73 @@
                 document.getElementById("valentineScreen").style.display = "flex";
             }, 2000);
         } else {
-            alert("Oops! Please select all the pictures correctly 🐶");
+            alert("Select all your husband pictures 😌");
         }
     });
+
+    function dodgeButton() {
+        const noBtn = document.getElementById("noBtn");
+        const offset = 150;
+        noBtn.style.transform = `translate(${Math.random()*300-150}px, ${Math.random()*300-150}px)`;
+    }
+
+    /* HEAVY HEART RAIN */
+    function rainHearts() {
+        const heart = document.createElement("div");
+        heart.className = "rainHeart";
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.fontSize = Math.random() * 25 + 15 + "px";
+        heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+        heart.style.color = ["#ff1493","#ff0000","#ff69b4","#ffc0cb"][Math.floor(Math.random()*4)];
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+    }
+
+    setInterval(rainHearts, 80); // LOTS of hearts raining
+
+    /* BIG RED HEART EXPLOSION */
+    function heartExplosion() {
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        for (let i = 0; i < 80; i++) {
+            const heart = document.createElement("div");
+            heart.className = "explodeHeart";
+            heart.innerHTML = "❤️";
+            heart.style.left = centerX + "px";
+            heart.style.top = centerY + "px";
+            heart.style.color = "red";
+
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = Math.random() * 400 + 100;
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+
+            heart.animate([
+                { transform: "translate(0,0)", opacity: 1 },
+                { transform: `translate(${x}px, ${y}px)`, opacity: 0 }
+            ], {
+                duration: 1200,
+                easing: "ease-out"
+            });
+
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1200);
+        }
+    }
 
     function sayYes() {
         heartExplosion();
         setTimeout(() => {
             document.getElementById("valentineScreen").innerHTML = `
-                <h1 style="margin-top:150px; color:white;">
-                💖 Song of Solomon 3:4 "I have found the one whom my soul loves" 💖<br>
+                <h1 style="margin-top:150px; color:red;">
+                ❤️ I have found the one whom my soul loves ❤️<br>
                 Eu te amo minha abelhinha 🐝❤️
                 </h1>
             `;
-        }, 800);
+        }, 900);
     }
-
-    function dodgeButton() {
-        const noBtn = document.getElementById("noBtn");
-        const offset = 150;
-        const newX = Math.random() * offset * 2 - offset;
-        const newY = Math.random() * offset * 2 - offset;
-        noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
-    }
-
-    function createHeart(x = null, y = null) {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.innerHTML = "💖";
-        heart.style.fontSize = Math.random() * 30 + 15 + "px";
-        heart.style.left = x ? x + "px" : Math.random() * window.innerWidth + "px";
-        heart.style.top = y ? y + "px" : "100vh";
-        document.body.appendChild(heart);
-        setTimeout(() => { heart.remove(); }, 5000);
-    }
-
-    function heartExplosion() {
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-
-        for (let i = 0; i < 50; i++) {
-            setTimeout(() => {
-                createHeart(
-                    centerX + (Math.random() * 300 - 150),
-                    centerY + (Math.random() * 300 - 150)
-                );
-            }, i * 20);
-        }
-    }
-
-    setInterval(() => createHeart(), 100);
 </script>
 
 </body>
