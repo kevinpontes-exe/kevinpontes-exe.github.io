@@ -1,35 +1,126 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Mr Fart's Website</title>
+    <title>Will You Be My Valentine? 💖</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
-            background-color: black;
-            color: white;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff9ecf, #ff4fa3);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
-            font-family: Arial;
+            overflow: hidden;
         }
+
         h1 {
-            color: lime;
+            margin-top: 100px;
+            font-size: 40px;
+            color: white;
+            text-shadow: 2px 2px 5px #ff1493;
         }
+
+        p {
+            color: white;
+            font-size: 20px;
+        }
+
+        .buttons {
+            margin-top: 40px;
+        }
+
         button {
-            padding: 10px 20px;
-            font-size: 18px;
-            background: lime;
+            padding: 15px 30px;
+            font-size: 20px;
             border: none;
+            border-radius: 30px;
             cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        #yesBtn {
+            background-color: #ff1493;
+            color: white;
+            margin-right: 20px;
+        }
+
+        #yesBtn:hover {
+            background-color: #ff69b4;
+            transform: scale(1.1);
+        }
+
+        #noBtn {
+            background-color: white;
+            color: #ff1493;
+            position: absolute;
+        }
+
+        .heart {
+            position: absolute;
+            color: white;
+            font-size: 20px;
+            animation: float 5s linear infinite;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-10vh);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
 
-    <h1>Welcome to My Website</h1>
-    <p>This website was coded by Mr Fart 😎</p>
+    <h1>Will You Be My Valentine? 💕</h1>
+    <p>Mr Fart made this just for you 🥺💘</p>
 
-    <button onclick="alert('You clicked the button!')">
-        Click Me
-    </button>
+    <div class="buttons">
+        <button id="yesBtn" onclick="sayYes()">YES 💖</button>
+        <button id="noBtn" onmouseover="moveButton()">NO 😢</button>
+    </div>
+
+    <script>
+        function sayYes() {
+            document.body.innerHTML = `
+                <h1 style="margin-top:150px; color:white;">
+                    YAYYYYY 💖💖💖<br>
+                    You just made me the happiest person ever 😭💕
+                </h1>
+            `;
+        }
+
+        function moveButton() {
+            const button = document.getElementById("noBtn");
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            button.style.left = x + "px";
+            button.style.top = y + "px";
+        }
+
+        // Floating hearts
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "💖";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = Math.random() * 20 + 10 + "px";
+            heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 300);
+    </script>
 
 </body>
 </html>
