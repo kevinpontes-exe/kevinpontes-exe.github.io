@@ -4,12 +4,15 @@
     <title>Will You Be My Valentine? 💖</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
     <style>
         body {
             margin: 0;
             padding: 0;
             background-color: #ffb6c1; /* Solid pink background */
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-family: 'Patrick Hand', cursive; /* Use Google Font */
             text-align: center;
             overflow: hidden;
         }
@@ -104,13 +107,10 @@
 
             // Calculate a random position near YES button
             const offset = 150; // how far NO can jump
-            const yesRect = yesBtn.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
+            const newX = Math.random() * offset * 2 - offset; // -offset to +offset
+            const newY = Math.random() * offset * 2 - offset;
 
-            let newX = Math.random() * offset * 2 - offset; // -offset to +offset
-            let newY = Math.random() * offset * 2 - offset;
-
-            // Set new position relative to container
+            // Move NO relative to its original position
             noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
         }
 
