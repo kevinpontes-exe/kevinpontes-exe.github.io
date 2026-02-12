@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Verify You're Not a Bot 🐶</title>
+    <title>Valentine Surprise 💖</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
     <style>
+        /* COMMON STYLES */
         body {
             margin: 0;
             font-family: 'Patrick Hand', cursive;
             background-color: #ffe6e6;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
-            padding: 20px;
             text-align: center;
+            overflow: hidden;
         }
 
-        h1 {
+        h1, p {
+            margin: 20px;
             color: #ff1493;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 3px #ff69b4;
         }
 
         p {
-            color: #ff1493;
             font-size: 18px;
-            margin-bottom: 20px;
+        }
+
+        /* CAPTCHA GRID */
+        #captchaScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .grid {
@@ -34,6 +37,7 @@
             grid-template-columns: repeat(3, 120px);
             gap: 10px;
             justify-content: center;
+            margin-top: 20px;
         }
 
         .grid img {
@@ -60,58 +64,171 @@
             background-color: #ff1493;
             color: white;
             cursor: pointer;
+            transition: 0.3s;
         }
 
         button:hover {
             background-color: #ff69b4;
         }
+
+        /* VALENTINE SCREEN */
+        #valentineScreen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #valentineScreen h1 {
+            font-size: 40px;
+            text-shadow: 2px 2px 5px #ff69b4;
+            margin-top: 100px;
+        }
+
+        #valentineScreen p {
+            font-size: 20px;
+        }
+
+        .buttons {
+            margin-top: 40px;
+            display: inline-flex;
+            gap: 20px;
+            position: relative;
+        }
+
+        #yesBtn, #noBtn {
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        #yesBtn {
+            background-color: #ff1493;
+            color: white;
+        }
+
+        #yesBtn:hover {
+            background-color: #ff69b4;
+            transform: scale(1.1);
+        }
+
+        #noBtn {
+            background-color: white;
+            color: #ff1493;
+        }
+
+        /* Floating hearts */
+        .heart {
+            position: absolute;
+            color: white;
+            font-size: 20px;
+            animation: float 5s linear infinite;
+        }
+
+        @keyframes float {
+            from { transform: translateY(100vh); opacity: 1; }
+            to { transform: translateY(-10vh); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <h1>Verify You're Not a Bot 🐶</h1>
-    <p>Select <strong>all the dogs</strong> to continue</p>
+<!-- CAPTCHA SCREEN -->
+<div id="captchaScreen">
+    <h1>Choose your husband to continue 💖</h1>
+    <p>Click all the pictures of your future husband to proceed</p>
 
     <div class="grid" id="imageGrid">
-        <!-- Example images: replace URLs with real dog/street images -->
-        <img src="https://placedog.net/200/200?id=1" data-type="dog">
-        <img src="https://images.unsplash.com/photo-1504215680853-026ed2a45def?fit=crop&w=200&h=200" data-type="street">
-        <img src="https://placedog.net/200/200?id=2" data-type="dog">
-        <img src="https://images.unsplash.com/photo-1544378731-85fa1c992f84?fit=crop&w=200&h=200" data-type="street">
-        <img src="https://placedog.net/200/200?id=3" data-type="dog">
-        <img src="https://images.unsplash.com/photo-1541122006-cf91f7c122c1?fit=crop&w=200&h=200" data-type="street">
-        <img src="https://placedog.net/200/200?id=4" data-type="dog">
-        <img src="https://images.unsplash.com/photo-1501986227835-bf0b8b6b07c7?fit=crop&w=200&h=200" data-type="street">
-        <img src="https://placedog.net/200/200?id=5" data-type="dog">
+        <!-- All 9 blocks use your image -->
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG" data-type="husband">
     </div>
 
     <button id="verifyBtn">Verify</button>
+</div>
 
-    <script>
-        const images = document.querySelectorAll("#imageGrid img");
+<!-- VALENTINE SCREEN -->
+<div id="valentineScreen">
+    <h1>Will You Be My Valentine? 💕</h1>
+    <p>Mr Fart made this just for you 🥺💘</p>
+    <div class="buttons">
+        <button id="yesBtn" onclick="sayYes()">YES 💖</button>
+        <button id="noBtn" onmouseover="dodgeButton()">NO 😢</button>
+    </div>
+</div>
 
+<script>
+    // CAPTCHA LOGIC
+    const images = document.querySelectorAll("#imageGrid img");
+
+    images.forEach(img => {
+        img.addEventListener("click", () => {
+            img.classList.toggle("selected");
+        });
+    });
+
+    document.getElementById("verifyBtn").addEventListener("click", () => {
+        let correct = true;
         images.forEach(img => {
-            img.addEventListener("click", () => {
-                img.classList.toggle("selected");
-            });
+            const isHusband = img.dataset.type === "husband";
+            const isSelected = img.classList.contains("selected");
+            if (isHusband !== isSelected) correct = false;
         });
 
-        document.getElementById("verifyBtn").addEventListener("click", () => {
-            let correct = true;
-            images.forEach(img => {
-                const isDog = img.dataset.type === "dog";
-                const isSelected = img.classList.contains("selected");
-                if (isDog !== isSelected) correct = false;
-            });
+        if (correct) {
+            // Show Valentine screen
+            document.getElementById("captchaScreen").style.display = "none";
+            document.getElementById("valentineScreen").style.display = "flex";
+        } else {
+            alert("Oops! Please select all the pictures correctly 🐶");
+        }
+    });
 
-            if (correct) {
-                // Success → load Valentine page
-                window.location.href = "valentine.html"; // Change to your Valentine page file
-            } else {
-                alert("Oops! Please select all the dogs correctly 🐶");
-            }
-        });
-    </script>
+    // VALENTINE LOGIC
+    function sayYes() {
+        document.getElementById("valentineScreen").innerHTML = `
+            <h1 style="margin-top:150px; color:white;">
+                YAYYYYY 💖💖💖<br>
+                You just made me the happiest person ever 😭💕
+            </h1>
+        `;
+    }
+
+    function dodgeButton() {
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+        const container = noBtn.parentElement;
+        const offset = 150;
+        const newX = Math.random() * offset * 2 - offset;
+        const newY = Math.random() * offset * 2 - offset;
+        noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
+    }
+
+    // Floating hearts
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 10 + "px";
+        heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => { heart.remove(); }, 5000);
+    }
+
+    setInterval(createHeart, 300);
+</script>
 
 </body>
 </html>
