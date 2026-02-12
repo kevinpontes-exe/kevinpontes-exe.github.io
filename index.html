@@ -28,6 +28,9 @@
 
         .buttons {
             margin-top: 40px;
+            display: inline-flex; /* Keep buttons side by side */
+            gap: 20px;
+            position: relative; /* Parent for NO button movement */
         }
 
         button {
@@ -43,7 +46,6 @@
         #yesBtn {
             background-color: #ff1493;
             color: white;
-            margin-right: 20px;
         }
 
         #yesBtn:hover {
@@ -54,7 +56,6 @@
         #noBtn {
             background-color: white;
             color: #ff1493;
-            position: absolute;
         }
 
         .heart {
@@ -79,29 +80,38 @@
 <body>
 
     <h1>Will You Be My Valentine? 💕</h1>
-    <p>Ball eu te AMO 💘</p>
+    <p>Mr Fart made this just for you 🥺💘</p>
 
     <div class="buttons">
         <button id="yesBtn" onclick="sayYes()">YES 💖</button>
-        <button id="noBtn" onmouseover="moveButton()">NO 😢</button>
+        <button id="noBtn" onmouseover="dodgeButton()">NO 😢</button>
     </div>
 
     <script>
         function sayYes() {
             document.body.innerHTML = `
                 <h1 style="margin-top:150px; color:white;">
-                    YOU MADE ME THE HAPPIEST PERSON EVER!!!!<br>
-                    💕 Eu te amo minha linda 💕
+                    YAYYYYY 💖💖💖<br>
+                    You just made me the happiest person ever 😭💕
                 </h1>
             `;
         }
 
-        function moveButton() {
-            const button = document.getElementById("noBtn");
-            const x = Math.random() * (window.innerWidth - 100);
-            const y = Math.random() * (window.innerHeight - 50);
-            button.style.left = x + "px";
-            button.style.top = y + "px";
+        function dodgeButton() {
+            const noBtn = document.getElementById("noBtn");
+            const yesBtn = document.getElementById("yesBtn");
+            const container = noBtn.parentElement;
+
+            // Calculate a random position near YES button
+            const offset = 150; // how far NO can jump
+            const yesRect = yesBtn.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+
+            let newX = Math.random() * offset * 2 - offset; // -offset to +offset
+            let newY = Math.random() * offset * 2 - offset;
+
+            // Set new position relative to container
+            noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
         }
 
         // Floating hearts
