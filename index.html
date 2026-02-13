@@ -37,7 +37,7 @@
             z-index: 2;
         }
 
-        /* 👇 Headings use same font + pink glow */
+        /* Headings font + pink glow */
         #captchaScreen h1,
         #valentineScreen h1 {
             font-family: 'Patrick Hand', cursive;
@@ -59,7 +59,7 @@
         .grid img {
             width: 120px;
             height: 120px;
-            object-fit: cover; /* ensures images fit perfectly */
+            object-fit: cover;
             border: 3px solid transparent;
             border-radius: 10px;
             cursor: pointer;
@@ -88,6 +88,8 @@
         button:hover { 
             background-color: #ff69b4; 
         }
+
+        #yesBtn:hover { transform: scale(1.1); }
 
         /* Loading Screen */
         #loadingScreen {
@@ -130,18 +132,13 @@
             color: white;
         }
 
-        #yesBtn:hover {
-            background-color: #ff69b4;
-            transform: scale(1.1);
-        }
-
         #noBtn {
             background-color: white;
             color: #ff1493;
             position: relative;
         }
 
-        /* 🩷 Background Heart Rain */
+        /* Heart rain */
         .heart-rain {
             position: fixed;
             top: -10px;
@@ -155,7 +152,7 @@
             100% { transform: translateY(110vh) rotate(360deg); }
         }
 
-        /* 💥 Explosion Hearts */
+        /* Explosion hearts */
         .explosion-heart {
             position: fixed;
             pointer-events: none;
@@ -179,7 +176,7 @@
 </head>
 <body>
 
-<!-- 🎵 Background Music -->
+<!-- Background Music -->
 <audio id="bgMusic" src="audio/love_song.mp3" loop></audio>
 
 <div id="captchaScreen">
@@ -217,6 +214,15 @@
 <script>
     const images = document.querySelectorAll("#imageGrid img");
     const music = document.getElementById('bgMusic');
+    let musicStarted = false;
+
+    // Start music on first click anywhere
+    document.body.addEventListener('click', () => {
+        if (!musicStarted) {
+            music.play().catch(e => console.log("Music blocked until user interaction"));
+            musicStarted = true;
+        }
+    }, { once: true });
 
     images.forEach(img => {
         img.addEventListener("click", () => {
@@ -225,9 +231,6 @@
     });
 
     document.getElementById("verifyBtn").addEventListener("click", () => {
-        // Start music on user interaction
-        music.play().catch(e => console.log("Music blocked until user interaction"));
-
         let correct = true;
         images.forEach(img => {
             if (!img.classList.contains("selected")) correct = false;
