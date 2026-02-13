@@ -22,7 +22,7 @@
         }
 
         p { 
-            font-size: 22px; /* increased size for CAPTCHA instruction */
+            font-size: 22px;
             color: #ff1493;
         }
 
@@ -33,11 +33,10 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            top: -50px; /* move up so Verify button shows on phone */
+            top: -50px;
             z-index: 2;
         }
 
-        /* Headings font + pink glow */
         #captchaScreen h1,
         #valentineScreen h1 {
             font-family: 'Patrick Hand', cursive;
@@ -91,7 +90,6 @@
 
         #yesBtn:hover { transform: scale(1.1); }
 
-        /* Loading Screen */
         #loadingScreen {
             display: none;
             font-size: 28px;
@@ -101,7 +99,6 @@
             z-index: 2;
         }
 
-        /* Valentine Screen */
         #valentineScreen {
             display: none;
             flex-direction: column;
@@ -162,22 +159,38 @@
         }
 
         @keyframes explode {
-            0% {
-                opacity: 1;
-                transform: translate(0,0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--x), var(--y)) scale(1.8);
-            }
+            0% { opacity: 1; transform: translate(0,0) scale(1); }
+            100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1.8); }
         }
 
+        /* Overlay for tap to start music */
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 182, 193, 0.95);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-family: 'Patrick Hand', cursive;
+            z-index: 9999;
+            cursor: pointer;
+            text-align: center;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
 
 <!-- Background Music -->
 <audio id="bgMusic" src="audio/love_song.mp3" loop></audio>
+
+<!-- Tap Overlay -->
+<div id="startOverlay">💖 Tap anywhere to start the surprise! 💖</div>
 
 <div id="captchaScreen">
     <h1>Choose your husband to continue 💖</h1>
@@ -214,15 +227,13 @@
 <script>
     const images = document.querySelectorAll("#imageGrid img");
     const music = document.getElementById('bgMusic');
-    let musicStarted = false;
 
-    // Start music on first click anywhere
-    document.body.addEventListener('click', () => {
-        if (!musicStarted) {
-            music.play().catch(e => console.log("Music blocked until user interaction"));
-            musicStarted = true;
-        }
-    }, { once: true });
+    // Show first-tap overlay
+    const overlay = document.getElementById('startOverlay');
+    overlay.addEventListener('click', () => {
+        music.play().catch(e => console.log("Music blocked"));
+        overlay.style.display = 'none';
+    });
 
     images.forEach(img => {
         img.addEventListener("click", () => {
