@@ -191,10 +191,17 @@
     const images = document.querySelectorAll("#imageGrid img");
     const music = document.getElementById('bgMusic');
 
-    // Start music on first tap anywhere
-    document.body.addEventListener('click', () => {
-        music.play().catch(() => {});
-    }, { once: true });
+    // Load music and set volume
+    music.load();
+    music.volume = 0.5;
+
+    // Play music on first interaction anywhere
+    function startMusic() {
+        music.play().catch(() => console.log("Autoplay blocked, waiting for next interaction"));
+    }
+
+    document.body.addEventListener('click', startMusic, { once: true });
+    document.getElementById("verifyBtn").addEventListener('click', startMusic);
 
     images.forEach(img => {
         img.addEventListener("click", () => {
