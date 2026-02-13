@@ -24,8 +24,7 @@
 
         p { font-size: 18px; }
 
-        /* CAPTCHA */
-        #captchaScreen {
+        #captchaScreen, #valentineScreen {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -33,6 +32,8 @@
             position: relative;
             z-index: 2;
         }
+
+        #valentineScreen { display: none; }
 
         .grid {
             display: grid;
@@ -60,7 +61,7 @@
 
         button {
             margin-top: 20px;
-            padding: 10px 25px;
+            padding: 12px 28px;
             font-size: 18px;
             border: none;
             border-radius: 30px;
@@ -69,37 +70,11 @@
             cursor: pointer;
             transition: 0.3s;
             position: relative;
-            z-index: 2;
+            z-index: 3;
         }
 
         button:hover { 
             background-color: #ff69b4; 
-        }
-
-        /* Loading Screen */
-        #loadingScreen {
-            display: none;
-            font-size: 28px;
-            margin-top: 150px;
-            color: #ff1493;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Valentine Screen */
-        #valentineScreen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        #valentineScreen h1 {
-            font-size: 40px;
-            text-shadow: 2px 2px 5px #ff69b4;
-            margin-top: 100px;
         }
 
         .buttons {
@@ -107,26 +82,7 @@
             display: inline-flex;
             gap: 20px;
             position: relative;
-            z-index: 2;
-        }
-
-        #yesBtn, #noBtn {
-            padding: 15px 30px;
-            font-size: 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            border: none;
-            position: relative;
-        }
-
-        #yesBtn {
-            background-color: #ff1493;
-            color: white;
-        }
-
-        #yesBtn:hover {
-            background-color: #ff69b4;
-            transform: scale(1.1);
+            z-index: 3;
         }
 
         #noBtn {
@@ -134,25 +90,40 @@
             color: #ff1493;
         }
 
-        /* 🩷 Raining Hearts Background 🩷 */
-        .heart {
+        /* 🩷 Background Heart Rain */
+        .heart-rain {
             position: fixed;
             top: -10px;
             animation: rain linear infinite;
             pointer-events: none;
-            z-index: -1; /* Behind everything */
+            z-index: -1;
         }
 
         @keyframes rain {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        /* 💥 Explosion Hearts */
+        .explosion-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 5;
+            font-size: 24px;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
             0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0.9;
+                opacity: 1;
+                transform: translate(0,0) scale(1);
             }
             100% {
-                transform: translateY(110vh) rotate(360deg);
-                opacity: 0.8;
+                opacity: 0;
+                transform: translate(var(--x), var(--y)) scale(1.8);
             }
         }
+
     </style>
 </head>
 <body>
@@ -162,22 +133,18 @@
     <p>Click all the pictures of your future husband to prove youre not a bot :)</p>
 
     <div class="grid" id="imageGrid">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
-        <img src="images/DSC04690_2.JPG" data-type="husband">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
+        <img src="images/DSC04690_2.JPG">
     </div>
 
     <button id="verifyBtn">Verify</button>
-</div>
-
-<div id="loadingScreen">
-    💘 Loading Love... 💘
 </div>
 
 <div id="valentineScreen">
@@ -206,25 +173,11 @@
 
         if (correct) {
             document.getElementById("captchaScreen").style.display = "none";
-            document.getElementById("loadingScreen").style.display = "block";
-
-            setTimeout(() => {
-                document.getElementById("loadingScreen").style.display = "none";
-                document.getElementById("valentineScreen").style.display = "flex";
-            }, 2000);
+            document.getElementById("valentineScreen").style.display = "flex";
         } else {
             alert("Oops! Please select all the pictures correctly 🐶");
         }
     });
-
-    function sayYes() {
-        document.getElementById("valentineScreen").innerHTML = `
-            <h1 style="margin-top:150px; color:white;">
-            💖 Song of Solomon 3:4 "I have found the one whom my soul loves" 💖<br>
-            Eu te amo minha abelhinha 🐝❤️
-            </h1>
-        `;
-    }
 
     function dodgeButton() {
         const noBtn = document.getElementById("noBtn");
@@ -234,22 +187,59 @@
         noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
     }
 
-    /* 🩷 Create Raining Hearts 🩷 */
-    function createHeart() {
+    function sayYes() {
+        explodeFromButton();
+        setTimeout(() => {
+            document.getElementById("valentineScreen").innerHTML = `
+                <h1 style="margin-top:150px; color:white;">
+                💖 Song of Solomon 3:4 "I have found the one whom my soul loves" 💖<br>
+                Eu te amo minha abelhinha 🐝❤️
+                </h1>
+            `;
+        }, 800);
+    }
+
+    function explodeFromButton() {
+        const btn = document.getElementById("yesBtn");
+        const rect = btn.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 80; i++) {
+            const heart = document.createElement("div");
+            heart.classList.add("explosion-heart");
+            heart.innerHTML = "🩷";
+
+            heart.style.left = centerX + "px";
+            heart.style.top = centerY + "px";
+
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = Math.random() * 300 + 100;
+            const x = Math.cos(angle) * distance + "px";
+            const y = Math.sin(angle) * distance + "px";
+
+            heart.style.setProperty('--x', x);
+            heart.style.setProperty('--y', y);
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 1000);
+        }
+    }
+
+    /* Background heart rain */
+    function createRainHeart() {
         const heart = document.createElement("div");
-        heart.classList.add("heart");
+        heart.classList.add("heart-rain");
         heart.innerHTML = "🩷";
         heart.style.left = Math.random() * window.innerWidth + "px";
         heart.style.fontSize = Math.random() * 20 + 15 + "px";
         heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
         document.body.appendChild(heart);
-
-        setTimeout(() => {
-            heart.remove();
-        }, 6000);
+        setTimeout(() => heart.remove(), 6000);
     }
 
-    setInterval(createHeart, 150);
+    setInterval(createRainHeart, 150);
 </script>
 
 </body>
