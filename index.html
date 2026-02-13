@@ -160,15 +160,15 @@
     <p>Click all the pictures of your future husband to prove youre not a bot :)</p>
 
     <div class="grid" id="imageGrid">
-        <img src="images/DSC04690_2.JPG" alt="Image 1">
-        <img src="images/IMG_7482.jpeg" alt="Image 2">
-        <img src="images/IMG_7773.jpeg" alt="Image 3">
-        <img src="images/beast.jpg" alt="Image 4">
-        <img src="images/funny african kid face.jpeg" alt="Image 5">
-        <img src="images/handsome squid.jpeg" alt="Image 6">
-        <img src="images/images.jpeg" alt="Image 7">
-        <img src="images/the-smolder.jpg.webp" alt="Image 8">
-        <img src="images/Spiderman.jpeg" alt="Image 9">
+        <img src="images/DSC04690_2.JPG" alt="Image 1" data-correct="true">
+        <img src="images/IMG_7482.jpeg" alt="Image 2" data-correct="true">
+        <img src="images/IMG_7773.jpeg" alt="Image 3" data-correct="true">
+        <img src="images/beast.jpg" alt="Image 4" data-correct="true">
+        <img src="images/funny african kid face.jpeg" alt="Image 5" data-correct="false">
+        <img src="images/handsome squid.jpeg" alt="Image 6" data-correct="false">
+        <img src="images/images.jpeg" alt="Image 7" data-correct="false">
+        <img src="images/the-smolder.jpg.webp" alt="Image 8" data-correct="true">
+        <img src="images/Spiderman.jpeg" alt="Image 9" data-correct="true">
     </div>
 
     <button id="verifyBtn">Verify</button>
@@ -203,12 +203,18 @@
     });
 
     document.getElementById("verifyBtn").addEventListener("click", () => {
-        let correct = true;
+        let allCorrect = true;
+        let anyWrong = false;
+
         images.forEach(img => {
-            if (!img.classList.contains("selected")) correct = false;
+            const selected = img.classList.contains("selected");
+            const correct = img.dataset.correct === "true";
+
+            if (selected && !correct) anyWrong = true;
+            if (!selected && correct) allCorrect = false;
         });
 
-        if (correct) {
+        if (allCorrect && !anyWrong) {
             document.getElementById("captchaScreen").style.display = "none";
             document.getElementById("loadingScreen").style.display = "block";
 
