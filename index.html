@@ -35,6 +35,15 @@
 
         #valentineScreen { display: none; }
 
+        #loadingScreen {
+            display: none;
+            font-size: 28px;
+            margin-top: 150px;
+            color: #ff1493;
+            position: relative;
+            z-index: 2;
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(3, 120px);
@@ -83,6 +92,10 @@
             gap: 20px;
             position: relative;
             z-index: 3;
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
         }
 
         #noBtn {
@@ -147,6 +160,10 @@
     <button id="verifyBtn">Verify</button>
 </div>
 
+<div id="loadingScreen">
+    💘 Loading Love... 💘
+</div>
+
 <div id="valentineScreen">
     <h1>💕 Will you do me the honor of letting me be your Valentine? 💕</h1>
     <p>(You cant say no)</p>
@@ -173,7 +190,12 @@
 
         if (correct) {
             document.getElementById("captchaScreen").style.display = "none";
-            document.getElementById("valentineScreen").style.display = "flex";
+            document.getElementById("loadingScreen").style.display = "block";
+
+            setTimeout(() => {
+                document.getElementById("loadingScreen").style.display = "none";
+                document.getElementById("valentineScreen").style.display = "flex";
+            }, 2000);
         } else {
             alert("Oops! Please select all the pictures correctly 🐶");
         }
@@ -189,6 +211,7 @@
 
     function sayYes() {
         explodeFromButton();
+
         setTimeout(() => {
             document.getElementById("valentineScreen").innerHTML = `
                 <h1 style="margin-top:150px; color:white;">
@@ -222,12 +245,10 @@
             heart.style.setProperty('--y', y);
 
             document.body.appendChild(heart);
-
             setTimeout(() => heart.remove(), 1000);
         }
     }
 
-    /* Background heart rain */
     function createRainHeart() {
         const heart = document.createElement("div");
         heart.classList.add("heart-rain");
