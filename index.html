@@ -180,7 +180,7 @@
 <body>
 
 <!-- 🎵 Background Music -->
-<audio src="audio/love_song.mp3" autoplay loop style="display:none;"></audio>
+<audio id="bgMusic" src="audio/love_song.mp3" loop></audio>
 
 <div id="captchaScreen">
     <h1>Choose your husband to continue 💖</h1>
@@ -216,6 +216,7 @@
 
 <script>
     const images = document.querySelectorAll("#imageGrid img");
+    const music = document.getElementById('bgMusic');
 
     images.forEach(img => {
         img.addEventListener("click", () => {
@@ -224,6 +225,9 @@
     });
 
     document.getElementById("verifyBtn").addEventListener("click", () => {
+        // Start music on user interaction
+        music.play().catch(e => console.log("Music blocked until user interaction"));
+
         let correct = true;
         images.forEach(img => {
             if (!img.classList.contains("selected")) correct = false;
