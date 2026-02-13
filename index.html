@@ -36,13 +36,13 @@
             z-index: 2;
         }
 
-        /* 👇 Headings use same font style as final love message */
+        /* 👇 Headings use same font + pink glow */
         #captchaScreen h1,
         #valentineScreen h1 {
             font-family: 'Patrick Hand', cursive;
             color: white;
             font-size: 40px;
-            text-shadow: none;
+            text-shadow: 2px 2px 8px #ff69b4, 0 0 15px #ff1493;
             margin-top: 100px;
         }
 
@@ -251,7 +251,7 @@
 
         setTimeout(() => {
             document.getElementById("valentineScreen").innerHTML = `
-                <h1 style="margin-top:150px; color:white;">
+                <h1 style="margin-top:150px; color:white; text-shadow: 2px 2px 8px #ff69b4, 0 0 15px #ff1493;">
                 💖 Song of Solomon 3:4 "I have found the one whom my soul loves" 💖<br>
                 Eu te amo minha abelhinha 🐝❤️
                 </h1>
