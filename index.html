@@ -24,22 +24,12 @@
 
         p { font-size: 18px; }
 
-        #captchaScreen, #valentineScreen {
+        /* CAPTCHA */
+        #captchaScreen {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        #valentineScreen { display: none; }
-
-        #loadingScreen {
-            display: none;
-            font-size: 28px;
-            margin-top: 150px;
-            color: #ff1493;
             position: relative;
             z-index: 2;
         }
@@ -70,7 +60,7 @@
 
         button {
             margin-top: 20px;
-            padding: 12px 28px;
+            padding: 10px 25px;
             font-size: 18px;
             border: none;
             border-radius: 30px;
@@ -86,6 +76,32 @@
             background-color: #ff69b4; 
         }
 
+        /* Loading Screen */
+        #loadingScreen {
+            display: none;
+            font-size: 28px;
+            margin-top: 150px;
+            color: #ff1493;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Valentine Screen */
+        #valentineScreen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        #valentineScreen h1 {
+            font-size: 40px;
+            text-shadow: 2px 2px 5px #ff69b4;
+            margin-top: 100px;
+        }
+
         .buttons {
             margin-top: 40px;
             display: inline-flex;
@@ -94,13 +110,28 @@
             z-index: 3;
         }
 
+        #yesBtn, #noBtn {
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            border: none;
+        }
+
+        #yesBtn {
+            background-color: #ff1493;
+            color: white;
+        }
+
         #yesBtn:hover {
+            background-color: #ff69b4;
             transform: scale(1.1);
         }
 
         #noBtn {
             background-color: white;
             color: #ff1493;
+            position: relative;
         }
 
         /* 🩷 Background Heart Rain */
@@ -238,11 +269,9 @@
 
             const angle = Math.random() * 2 * Math.PI;
             const distance = Math.random() * 300 + 100;
-            const x = Math.cos(angle) * distance + "px";
-            const y = Math.sin(angle) * distance + "px";
 
-            heart.style.setProperty('--x', x);
-            heart.style.setProperty('--y', y);
+            heart.style.setProperty('--x', Math.cos(angle) * distance + "px");
+            heart.style.setProperty('--y', Math.sin(angle) * distance + "px");
 
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 1000);
